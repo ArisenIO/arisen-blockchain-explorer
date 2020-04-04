@@ -69,44 +69,44 @@ module.exports = function(io, mongoMain){
               cb(null, result);
           });
         },
-        ram: cb => {
-              global.rsn.getTableRows({
-                  json: true,
-                  code: "arisen",
-                  scope: "arisen",
-                  table: "rammarket",
-                  limit: 10
-              })
-               .then(result => {
-                    let dateNow = +new Date();
-                    if (dateNow < timeToUpdate){
-                        return cb(null, result);
-                    }
-                    timeToUpdate = +new Date() + config.RAM_UPDATE;
-                    if (!result || !result.rows || !result.rows[0] || !result.rows[0].quote || !result.rows[0].base){
-                                      log.error('rammarket data error', result);
-                                      return cb(null);
-                    }
-                    let data = result.rows[0];
-                    let quoteBalance  = data.quote.balance;
-                    let baseBalance   = data.base.balance;
-                    let ram = new RAM({
-                        quote: quoteBalance,
-                        base: baseBalance
-                    });
-                    ram.save(err => {
-                       if (err) {
-                        return cb(err);
-                       }
-                       log.info('ram market price data ========= ', ram);
-                       cb(null, result);
-                    });
-               })
-               .catch(err => {
-                    log.error(err);
-                    cb('No result');
-               });
-        },
+        // ram: cb => {
+        //       global.rsn.getTableRows({
+        //           json: true,
+        //           code: "arisen",
+        //           scope: "arisen",
+        //           table: "rammarket",
+        //           limit: 10
+        //       })
+        //        .then(result => {
+        //             let dateNow = +new Date();
+        //             if (dateNow < timeToUpdate){
+        //                 return cb(null, result);
+        //             }
+        //             timeToUpdate = +new Date() + config.RAM_UPDATE;
+        //             if (!result || !result.rows || !result.rows[0] || !result.rows[0].quote || !result.rows[0].base){
+        //                               log.error('rammarket data error', result);
+        //                               return cb(null);
+        //             }
+        //             let data = result.rows[0];
+        //             let quoteBalance  = data.quote.balance;
+        //             let baseBalance   = data.base.balance;
+        //             let ram = new RAM({
+        //                 quote: quoteBalance,
+        //                 base: baseBalance
+        //             });
+        //             ram.save(err => {
+        //                if (err) {
+        //                 return cb(err);
+        //                }
+        //                log.info('ram market price data ========= ', ram);
+        //                cb(null, result);
+        //             });
+        //        })
+        //        .catch(err => {
+        //             log.error(err);
+        //             cb('No result');
+        //        });
+        // },
         history: cb => {
             let dateNow = +new Date();
             if (dateNow < timeToUpdateHistory){
