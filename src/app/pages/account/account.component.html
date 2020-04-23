@@ -22,7 +22,7 @@
 					<strong class="block-info-header">Total Balance:</strong>
 				</div>
 				<div class="col-sm-9">
-					<strong>{{ balance?.toLocaleString() }} RSN</strong> /
+					<strong>{{ balance?.toLocaleString() }} RIX</strong> /
 					<small>{{ (balance * rsnRate?.RAW?.RSN?.USD?.PRICE).toLocaleString() }} USD</small>
 				</div>
 			</div>
@@ -32,7 +32,7 @@
 					<strong class="block-info-header">Unstaked:</strong>
 				</div>
 				<div class="col-sm-9">
-					<small><strong>{{ unstaked }} RSN</strong></small>
+					<small><strong>{{ unstaked }} RIX</strong></small>
 				</div>
 			</div>
 
@@ -41,7 +41,7 @@
 					<strong class="block-info-header">Staked:</strong>
 				</div>
 				<div class="col-sm-9">
-					<small><strong>{{ mainData?.voter_info?.staked / 10000 }} RSN</strong></small>
+					<small><strong>{{ mainData?.voter_info?.staked / 10000 }} RIX</strong></small>
 				</div>
 			</div>
 
