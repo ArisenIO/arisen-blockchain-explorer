@@ -24,7 +24,7 @@ var API = new mongoose.Schema({
     type: Number,
     index: true
   },
-  balance_rix: {
+  balance_rsn: {
     type: Number,
     index: true
   },
