@@ -11,7 +11,7 @@ export const environment = {
         chainId: chain
     },
     chain: chain,
-    Rix: {
+    RIX: {
         httpEndpoint: 'https://greatchains.arisennodes.io',
         chainId: chain,
         verbose: false
