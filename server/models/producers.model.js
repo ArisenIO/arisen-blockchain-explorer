@@ -1,5 +1,5 @@
 /*
-   Created by jared
+   Created by rixwebnetbp1
 */
 var mongoose = require('mongoose');
 mongoose.Promise = global.Promise;
@@ -32,3 +32,6 @@ module.exports = function (connection) {
   }
   return MODEL;
 };
+
+
+

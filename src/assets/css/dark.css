@@ -1,0 +1,94 @@
+body{
+	background: #29292d;
+	color: #fff;
+}
+.strong-content{
+	color: #fff;
+}
+.mat-form-field-label {
+  color: #b1b6bf;
+}
+.main-table{
+	background: #2d2d31 !important;
+}
+.main-table .mat-header-row, 
+.mat-paginator,
+.mat-expansion-panel,
+.token-tranfer-table,
+.mat-tab-group.mat-primary .mat-tab-label:not(.mat-tab-disabled):focus, .mat-tab-group.mat-primary .mat-tab-link:not(.mat-tab-disabled):focus, .mat-tab-nav-bar.mat-primary .mat-tab-label:not(.mat-tab-disabled):focus, .mat-tab-nav-bar.mat-primary .mat-tab-link:not(.mat-tab-disabled):focus{
+	background-color: #33333a; 
+}
+.mat-table{
+	background-color: #2d2d32;
+}
+.actions-main-container{
+	border-bottom: 1px solid #33333b;
+}
+.market-header, 
+.mat-select-value,
+.main-table .mat-header-cell,
+.mat-paginator, 
+.mat-paginator-page-size .mat-select-trigger, 
+.mat-paginator-icon,
+.mat-select-arrow,
+.mat-cell,
+.block-info-header,
+.color-grey,
+.mat-tab-label, .mat-tab-link,
+.mat-expansion-panel-header-title{
+	color: #b1b6bf !important;
+}
+.block-info-line{
+	border-top: 1px solid #2d2d32;
+}
+.mat-form-field-underline{
+	background-color: #b1b6bf;
+}
+.spinner-container{
+	background: rgba(41, 41, 45, 0.8);
+}
+.main-table .mat-row{
+	box-shadow: 1px 1px 1px #29292d;
+}
+.account-ram .mat-progress-bar-buffer {
+	background: #515d65; /*#0794ec;*/ 
+}
+.account-ram .mat-progress-bar-fill::after{
+	background-color: #0984ef; 
+}
+.account-net .mat-progress-bar-buffer{
+	background: #69624d;
+}
+.account-cpu .mat-progress-bar-buffer {
+    background: #5e715f;
+}	
+.segment-key{
+	color: #c08aef !important;
+}
+.mat-dialog-container {
+    background: #24242a;
+    color: #b1b6bf;
+}
+.mat-fab.mat-warn, .mat-mini-fab.mat-warn, .mat-raised-button.mat-warn{
+	border: 1px solid #f44336;
+	background: rgba(0,0,0,0);
+}
+.mat-fab.mat-primary, .mat-mini-fab.mat-primary, .mat-raised-button.mat-primary{
+	background: -webkit-gradient(linear,left top, right top,from(#0086f4),to(#2c5aca));
+    background: linear-gradient(to right,#0086f4,#2c5aca);
+    background: -webkit-gradient(linear,left top,right top,from(#0086f4),to(#2c5aca));
+}
+.main-container-actions .fa-long-arrow-right{
+	color: #fff !important;
+}
+.small-tokens{
+	color: #fff !important;
+	background: #33333a !important;
+}
+.widget-chart-btn{
+	background: #2c2c31;
+}
+
+
+
+

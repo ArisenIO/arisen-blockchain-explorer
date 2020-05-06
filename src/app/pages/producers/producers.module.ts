@@ -8,11 +8,11 @@ import { MatAutocompleteModule,
          MatSelectModule,
          MatSortModule,
          MatTableModule,
-         MatFormFieldModule } from '@angular/material';
+         MatFormFieldModule,
+         MatProgressBarModule } from '@angular/material';
 import { CommonModule } from '@angular/common';
 import { appRoutes } from '../../main.router';
 import { MainService } from '../../services/mainapp.service';
-
 
 let imports = [
     MatAutocompleteModule,
@@ -24,8 +24,10 @@ let imports = [
     MatSelectModule,
     MatSortModule,
     MatTableModule,
+    MatProgressBarModule,
     CommonModule,
-    appRoutes ];
+    appRoutes
+];
 
 @NgModule({
   declarations: [

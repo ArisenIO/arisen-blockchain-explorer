@@ -1,49 +1,44 @@
+<app-login-eos></app-login-eos>
+
 <nav class="main-navigation">
-  <!-- remove notice if need -->
-  <!-- <div style="text-align: center;">
-    <p style="margin-left: initial;">Important Note: This blockchain explorer is for exploring Arisen`s test network. Arisen`s main network officially launches April 16th, 2020. Follow the countdown to click <a style="text-align: center;color:#71d479;" target="blank" href="https://arisen.network">here</a>
-    </p>
-  </div> -->
   <a routerLink="" class="logo pull-left">
-    <img src="/assets/images/arisen-logo-dark-gray.png" width="25" alt="">
-    <span class="name-explorer">Explorer</span>
+    <img src="{{frontConfig?.logo}}" width="30" alt="">
+    <span class="name-explorer">{{frontConfig?.name?.small}}</span>
   </a>
   <div class="main-search">
     <i class="fal fa-search" (click)="searchGlobal(search)"></i>
     <input type="search" placeholder="Search by block, tx, account, address" [(ngModel)]="search" (keyup)="onKey($event)">
   </div>
   <ul class="pull-right main-nav-middle">
-    <!--<li><button mat-button color="basic" routerLink="tokens" [ngClass]="{'nav-active': activeMenu() === '/tokens'}">Tokens</button></li>-->
-    <li><button mat-button color="basic" routerLink="wallet" [ngClass]="{'nav-active': activeMenu() === '/wallet'}" class="mobile-no">wallet</button></li>
-    <li><button mat-button color="basic" routerLink="vote" [ngClass]="{'nav-active': activeMenu() === '/vote'}" class="mobile-no">vote</button></li>
-    <li><button mat-button color="basic" routerLink="analytics" [ngClass]="{'nav-active': activeMenu() === '/analytics'}">Analytics</button></li>
-    <li><button mat-button color="basic" routerLink="ram" [ngClass]="{'nav-active': activeMenu()  === '/ram'}">Ram</button></li>
+    <li *ngIf="!frontConfig?.customBalance"><button mat-button color="basic" routerLink="wallet" [ngClass]="{'nav-active': activeMenu() === '/wallet'}" class="mobile-no">wallet</button></li>
+    <li *ngIf="!frontConfig?.customBalance"><button mat-button color="basic" routerLink="vote" [ngClass]="{'nav-active': activeMenu() === '/vote'}" class="mobile-no">vote</button></li>
+    <li *ngIf="!frontConfig?.customBalance"><button mat-button color="basic" routerLink="analytics" [ngClass]="{'nav-active': activeMenu() === '/analytics'}">Analytics</button></li>
+    <li *ngIf="!frontConfig?.customBalance"><button mat-button color="basic" routerLink="ram" [ngClass]="{'nav-active': activeMenu()  === '/ram'}">Ram</button></li>
     <li><button mat-button color="basic" routerLink="producers" [ngClass]="{'nav-active': activeMenu()  === '/producers'}">Producers</button></li>
-    <!--<li class="mobile-no"><button mat-button color="basic" routerLink="soon">API</button></li>-->
     <li>
-        <a _ngcontent-c0="" href="https://twitter.com/arisenio" class="telegram-button" target="_blank">
-          <i _ngcontent-c0="" class="fab fa-twitter"></i>
+        <a class="telegram-button" (click)="darkEnable(!darkTheme)">
+          <i class="fas fa-moon" *ngIf="!darkTheme"></i>
+          <i class="fas fa-sun" *ngIf="darkTheme"></i>
         </a>
     </li>
   </ul>
 </nav>
 
 <main-tcustomize-charts></main-tcustomize-charts>
-
 <router-outlet></router-outlet>
-
-<simple-notifications [options]="options"></simple-notifications>
 
 <footer>
   <div class="container">
   <div class="pull-left">Copyright © 2020 The Satoshi Foundation</div>
   <ul class="pull-right">
-       <!--<li><a routerLink="soon">API</a></li>-->
-       <li><a href="https://docs.arisen.network" target="_blank">Developer Documentation</a></li>
-       <li><a href="https://github.com/arisenio" target="_blank"><i class="fab fa-github"></i></a></li>
-       <li><a href="https://facebook.com/arisenx" target="_blank"><i class="fab fa-facebook"></i></a></li>
-       <li><a href="https://medium.com/arisenx" target="_blank"><i class="fab fa-medium"></i></a></li>
-       <li><a href="https://twitter.com/arisenx" target="_blank"><i class="fab fa-twitter"></i></a></li>
+    <li><a href="https://docs.arisen.network" target="_blank">Developer Documentation</a></li>
+    <li *ngFor="let elem of env.frontConfig.social;">
+      <a [href]="elem.link" target="_blank"><i class="fab {{elem.icon}}" *ngIf="elem.link"></i></a>
+    </li>
   </ul>
    </div>
 </footer>
+
+<link rel="stylesheet" href="/assets/css/dark.css" *ngIf="darkTheme">
+
+

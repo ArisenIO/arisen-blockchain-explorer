@@ -1,46 +1,47 @@
 <div class="container">
 
-<div class="spinner-container" *ngIf="spinner">
+<div class="spinner-container" *ngIf="scatterService.spinnerRAM">
     <mat-spinner class="spinner-color"></mat-spinner>
 </div>
 
 	<h1 class="market-header">Vote for BPs</h1>
 
-	<div class="col-sm-4 block-info-line" *ngIf="!identity">
-		  <button mat-raised-button class="btn-generate" color="primary" (click)="loginArkId()">Login with aBank</button>
+	<div class="col-sm-4 block-info-line" *ngIf="!loginEOSService.accountName">
+		 <a href='https://github.com/arisenio/avote/releases' target="_blank"><button mat-raised-button class="btn-generate" color="primary">Connect Wallet</button></a>
+		  <!-- <button mat-raised-button class="btn-generate" color="primary" (click)="loginEOSService.openPopup()">Connect Wallet</button> -->
 	</div>
 
-	<div class="block-info" *ngIf="identity">
+	<div class="block-info" *ngIf="loginEOSService.accountName">
 			<div class="col-sm-4">
 			 <div class="col-sm-12 no-padding">
 					<div class="avatatar-img">
 				 		<img src="/assets/images/user-astronaut-solid.svg" width="25" >
 				 	</div>
-				 	<a [routerLink]="['/account', identity?.accounts[0]?.name]" class="color-green acc-name">
-				  		{{ identity?.accounts[0]?.name }}
+				 	<a [routerLink]="['/account', loginEOSService.accountName]" class="color-green acc-name">
+				  		{{ loginEOSService.accountName }}
 				 	</a>
 			 </div>
-
+				
 			<div class="col-sm-12 acc-list no-padding">
 				  <div class="balance-acc">
-    			     Total Balance: <strong>{{ balance?.toLocaleString() }} RIX</strong>
+    			     Total Balance: <strong>{{ scatterService.balance?.toLocaleString() }} {{frontConfig?.coin}}</strong>
     			  </div>
     			  <div class="balance-acc">
-    			     Unstaked: <small><strong>{{ unstaked?.toLocaleString() }} RIX</strong></small>
+    			     Unstaked: <small><strong>{{ scatterService.unstaked?.toLocaleString() }} {{frontConfig?.coin}}</strong></small>
     			  </div>
     			  <div class="balance-acc">
-    			     Staked: <small><strong>{{ staked?.toLocaleString() }} RIX</strong></small>
+    			     Staked: <small><strong>{{ scatterService.staked?.toLocaleString() }} {{frontConfig?.coin}}</strong></small>
     			  </div>
     		</div>
-
+    
 
     		<div class="col-sm-12 acc-list no-padding">
       				<div class="analytics-header-right top-ten">
       			  CPU:
       			</div>
       			<div class="analytics-text-right">
-        			<mat-progress-bar mode="determinate" value="{{mainData?.cpu_limit?.used / mainData?.cpu_limit?.max * 100}}" class="progress-bar-usage account-cpu"></mat-progress-bar>
-        			<small>{{ (mainData?.cpu_limit?.used / 1000000).toFixed(2) }} sec</small> / <small>{{ (mainData?.cpu_limit?.max / 1000000).toFixed(2) }} sec</small>
+        			<mat-progress-bar mode="determinate" value="{{scatterService.mainDataRAM?.cpu_limit?.used / scatterService.mainDataRAM?.cpu_limit?.max * 100}}" class="progress-bar-usage account-cpu"></mat-progress-bar>
+        			<small>{{ (scatterService.mainDataRAM?.cpu_limit?.used / 1000000).toFixed(2) }} sec</small> / <small>{{ (scatterService.mainDataRAM?.cpu_limit?.max / 1000000).toFixed(2) }} sec</small>
       		    </div>
     		</div>
 
@@ -49,25 +50,25 @@
     		    NET:
     		  </div>
     		  <div class="analytics-text-right ">
-        			<mat-progress-bar mode="determinate" value="{{mainData?.net_limit?.used / mainData?.net_limit?.max * 100}}" class="progress-bar-usage account-net"></mat-progress-bar>
-        			<small>{{ (mainData?.net_limit?.used / 1024).toFixed(2) }} kb</small> / <small>{{ (mainData?.net_limit?.max / 1024).toFixed(2) }} kb</small>
+        			<mat-progress-bar mode="determinate" value="{{scatterService.mainDataRAM?.net_limit?.used / scatterService.mainDataRAM?.net_limit?.max * 100}}" class="progress-bar-usage account-net"></mat-progress-bar>
+        			<small>{{ (scatterService.mainDataRAM?.net_limit?.used / 1024).toFixed(2) }} kb</small> / <small>{{ (scatterService.mainDataRAM?.net_limit?.max / 1024).toFixed(2) }} kb</small>
       		 	</div>
     		 </div>
-
+    		 
     		 <div class="col-sm-12 acc-list no-padding">
     			  <div class="analytics-header-right top-ten">
     			    RAM:
     			  </div>
     			  <div class="analytics-text-right">
-    			    <mat-progress-bar mode="determinate" value="{{mainData?.ram_usage / mainData?.ram_quota * 100}}" class="progress-bar-usage account-ram"></mat-progress-bar>
-        			<small>{{ (mainData?.ram_usage / 1024).toFixed(2) }} kb</small> / <small>{{ (mainData?.ram_quota / 1024).toFixed(2) }} kb</small>
+    			    <mat-progress-bar mode="determinate" value="{{scatterService.mainDataRAM?.ram_usage / scatterService.mainDataRAM?.ram_quota * 100}}" class="progress-bar-usage account-ram"></mat-progress-bar>
+        			<small>{{ (scatterService.mainDataRAM?.ram_usage / 1024).toFixed(2) }} kb</small> / <small>{{ (scatterService.mainDataRAM?.ram_quota / 1024).toFixed(2) }} kb</small>
       			  </div>
    			</div>
 
-        <div class="col-sm-12 acc-list no-padding" *ngIf="identity">
-            <button mat-raised-button class="btn-generate" color="primary" (click)="logoutArkId()">Logout</button>
+        <div class="col-sm-12 acc-list no-padding" *ngIf="loginEOSService.accountName">
+            <button mat-raised-button class="btn-generate" color="primary" (click)="loginEOSService.logout()">Logout</button>
         </div>
-
+        
 
 			</div>
 
@@ -79,11 +80,11 @@
   							<mat-form-field>
   							      <input matInput placeholder="Voter" required="true" [(ngModel)]="vote.voter">
   							</mat-form-field>
-
+							
 								<!--<mat-form-field>
   							  		<input matInput placeholder="Proxy" required="true" [(ngModel)]="vote.proxy">
   							</mat-form-field>-->
-
+							
 								<mat-form-field>
   							  		<mat-chip-list #chipList>
                         <mat-chip *ngFor="let bp of vote.producers" [selectable]="selectable"
@@ -99,7 +100,7 @@
                       </mat-chip-list>
   							</mat-form-field>
 
-  							<button mat-raised-button color="primary" class="btn-generate" (click)="generateTransaction()">Generate Transaction</button>
+  							<button mat-raised-button color="primary" class="btn-generate" (click)="scatterService.generateTransaction(vote)">Generate Transaction</button>
 				  		</div>
 				  </mat-tab>
 				</mat-tab-group>

@@ -16,7 +16,7 @@ import { AppComponent } from './app.component';
 import { appRoutes, appRoutingProviders } from './main.router';
 
 import { HTTP_INTERCEPTORS } from '@angular/common/http';
-import { SimpleNotificationsModule } from 'angular2-notifications';
+//import { SimpleNotificationsModule } from 'angular2-notifications';
 //import { AuthService } from './services/auth.service';
 
 import { MainPageModule } from './pages/main_page/main_page.module';
@@ -35,6 +35,13 @@ import { SoonModule } from './pages/soon/soon.module';
 import { MainTcustomizeModule } from './components/main_customize_charts/main_tcustomize.module';
 import { SocketIoModule, SocketIoConfig } from 'ng-socket-io';
 import { LeafletModule } from '@asymmetrik/ngx-leaflet';
+
+import { WidgetModule } from './components/ram_widget/widget.module';
+
+import { environment } from '../environments/environment';
+import { LoginEOSModule } from 'eos-ulm';
+
+import { ScatterService } from './services/scatter.service';
 
 const socketConfig: SocketIoConfig = { url: '/', options: {
     autoConnect: true,
@@ -61,9 +68,20 @@ const socketConfig: SocketIoConfig = { url: '/', options: {
     MatMenuModule,
     MatSelectModule,
     MainTcustomizeModule,
-    SimpleNotificationsModule.forRoot(),
+    //SimpleNotificationsModule.forRoot(),
     SocketIoModule.forRoot(socketConfig),
     LeafletModule.forRoot(),
+    LoginEOSModule.forRoot({
+          appName: environment.appName,
+          httpEndpoint: environment.RIX.httpEndpoint,
+          chain: environment.chain,
+          verbose: environment.RIX.verbose,
+          blockchain: environment.network.blockchain,
+          host: environment.network.host,
+          port: environment.network.port,
+          protocol: environment.network.protocol,
+          expireInSeconds: environment.network.expireInSeconds
+    }),
     MainPageModule,
     BlockPageModule,
     TokensPageModule,
@@ -76,9 +94,10 @@ const socketConfig: SocketIoConfig = { url: '/', options: {
     ProducerModule,
     AnalyticsPageModule,
     RamPageModule,
-    SoonModule
+    SoonModule,
+    WidgetModule
   ],
-  providers: [appRoutingProviders],
+  providers: [appRoutingProviders, ScatterService],
   bootstrap: [AppComponent]
 })
 export class AppModule {}

@@ -31,12 +31,12 @@
 }
 .logo{
 	font-size: 12px;
-	padding: 9px 40px;
+	padding: 9px 25px;
 	color: #5e5e5f !important;
 	font-weight: 300;
 }
 .logo img{
-	margin-top: 10px;
+	margin-top: 5px;
 }
 .logo span{
     margin-left: 10px;
@@ -44,7 +44,7 @@
     color: #fff;
     margin-top: 3px;
 }
-.logo .name-rsn{
+.logo .name-eos{
 	font-size: 30px;
 }
 .logo .name-explorer{
@@ -140,7 +140,7 @@
 	color: #6de29a;
 }
 .main-nav-right{
-	margin-right: 30px !important;
+	margin-right: 30px !important; 
 }
 .main-nav-right li button{
 	text-transform: inherit;
@@ -221,10 +221,21 @@ footer a{
 	color: #fff;
 	text-decoration: none;
 	font-size: 14px;
-}
+}	
 footer i{
 	font-size: 20px;
 }
 .mainpage-currency-name{
 	width: 50px;
 }
+
+
+
+
+
+
+
+
+
+
+

@@ -4,6 +4,7 @@ import { Socket } from 'ng-socket-io';
 import * as shape from 'd3-shape';
 import { MainService } from '../../services/mainapp.service';
 import { forkJoin } from "rxjs/observable/forkJoin";
+import { environment } from '../../../environments/environment';
 
 @Component({
   selector: 'main-tcustomize-charts',
@@ -27,24 +28,30 @@ export class MainCustomizeChartsComponent implements OnInit{
       showYAxisLabel : false,
       yAxisLabel : 'Population',
       autoScale : true,
-  };
+  }; 
   curve = shape.curveCardinal;
   blockchainData;
   aggragationData;
   ramPrice;
-  //rsn = this.MainService.getGlobalNetConfig();
+  //eos = this.MainService.getGlobalNetConfig();
   TPSliveTx = 0;
   usersOnline = 0;
   timeForUpdate = 5000;
+  producer;
+  actionsTransactions;
+  frontConfig = environment.frontConfig;
 
-  constructor(private http: HttpClient, private socket: Socket, private MainService: MainService){}
+  constructor(private http: HttpClient, 
+              private socket: Socket, 
+              public mainService: MainService){
+  }
 
   getData() {
-        this.http.get('https://nv6khovry9.execute-api.us-east-1.amazonaws.com/dev/rsn_price_from_bts')
+        this.http.get(`https://nv6khovry9.execute-api.us-east-1.amazonaws.com/dev/rsn_price_from_bts`)
                   .subscribe(
                       (res: any) => {
                            this.currencyObj = parseFloat(res.data.USD.price).toFixed(5);
-                           this.MainService.setRsnPrice(this.currencyObj);
+                           this.mainService.setRixPrice(this.currencyObj);
                            setTimeout(() => { this.getData() }, this.timeForUpdate);
                       },
                       (error) => {
@@ -54,7 +61,7 @@ export class MainCustomizeChartsComponent implements OnInit{
   }
 
   getChart() {
-        this.http.get('https://min-api.cryptocompare.com/data/histohour?fsym=EOS&tsym=USD&limit=24&aggregate=3&e=CCCAGG')
+        this.http.get(`https://min-api.cryptocompare.com/data/histohour?fsym=EOS&tsym=USD&limit=24&aggregate=3&e=CCCAGG`)
                   .subscribe(
                       (res: any) => {
                            this.mainCurrencyChartDataRes = this.createChartArr(res.Data);
@@ -88,6 +95,26 @@ export class MainCustomizeChartsComponent implements OnInit{
                       });
   }
 
+  liveActions(){
+    this.mainService.liveTXHide = !this.mainService.liveTXHide;
+    if (this.mainService.liveTXHide) {
+       localStorage.setItem('liveTXHide', 'hide');
+    } else {
+       localStorage.removeItem('liveTXHide');
+    }
+  }
+
+  /*getActionsTransactions(){
+        this.http.get('/api/v1/get_actions_transactions')
+                  .subscribe(
+                      (res: any) => {
+                           this.actionsTransactions = res;
+                      },
+                      (error) => {
+                          console.error(error);
+                      });
+  }*/
+
   createChartArr(data){
     let result = [];
       data.forEach(elem => {
@@ -117,10 +144,6 @@ export class MainCustomizeChartsComponent implements OnInit{
   }
 
   countTPS(data){
-      if (!data || data.length < 2){
-           console.log("Data error TPS", data);
-           return null;
-      }
       let start = data[0].transactions.length;
       let end = data[1].transactions.length;
       return start + end;
@@ -133,6 +156,7 @@ export class MainCustomizeChartsComponent implements OnInit{
       this.getBlockchainData();
       this.getAggregationData();
       this.getRam();
+      //this.getActionsTransactions();
       //this.getTPSlive();
 
       this.socket.on('get_ram', res => {
@@ -148,7 +172,11 @@ export class MainCustomizeChartsComponent implements OnInit{
       });
 
       this.socket.on('get_tps_blocks', res => {
-          this.TPSliveTx = this.countTPS(res);
+          if (res && res.length === 2){
+             this.TPSliveTx = this.countTPS(res);
+             this.producer = (this.producer === res[1].producer) ? this.producer : res[1].producer;
+             this.mainService.changeMessage(this.producer);
+          }
       });
 
       this.socket.on('get_aggregation', res => {

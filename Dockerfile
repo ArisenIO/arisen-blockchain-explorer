@@ -1,21 +1,22 @@
-FROM node:9.5
+FROM node:10.15.3
 
-ENV PORT 3039
+ARG PORT=3039
+ENV PORT=${PORT}
 
-RUN apt-get update \
-	&& apt-get install -y nodejs npm git git-core \
-    && ln -s /usr/bin/nodejs /usr/bin/node
+ARG CONFIG_NET=production
+ENV CONFIG_NET=${CONFIG_NET}
 
-# Adding sources
 WORKDIR /home/arisen-blockchain-explorer
 COPY . /home/arisen-blockchain-explorer
 
-RUN cd /home/arisen-blockchain-explorer && npm install -g @angular/cli@1.7.1
+RUN npm install -g pm2@2.10.4
+RUN npm install -g @angular/cli@7.1.4
 RUN cd /home/arisen-blockchain-explorer && npm install
-RUN cd /home/arisen-blockchain-explorer && ng build --prod
-RUN cd /home/arisen-blockchain-explorer && mkdir server/logs
+RUN cd /home/arisen-blockchain-explorer && node patch
+RUN cd /home/arisen-blockchain-explorer/server && npm install
+RUN cd /home/arisen-blockchain-explorer && ng build --configuration=${CONFIG_NET} --optimization=false
 
-CMD [ "node", "/home/arisen-blockchain-explorer/server/server.js" ]
+CMD ["pm2-runtime", "/home/arisen-blockchain-explorer/server/ecosystem.config.js", "--web"]
 
-EXPOSE 3039
-EXPOSE 3001
+EXPOSE ${PORT}
+EXPOSE 9615

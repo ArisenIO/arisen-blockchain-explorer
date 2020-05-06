@@ -1,10 +1,11 @@
-import { Component, OnInit, OnDestroy, Inject } from '@angular/core';
+import { Component, OnInit, OnDestroy, Inject, ViewChild } from '@angular/core';
 import { MatPaginator, MatTableDataSource, MatSort } from '@angular/material';
 import { ActivatedRoute } from '@angular/router';
 import { HttpClient } from '@angular/common/http';
 import * as moment from 'moment';
 import { MainService } from '../../services/mainapp.service';
 import {MatDialog, MAT_DIALOG_DATA} from '@angular/material';
+import { environment } from '../../../environments/environment';
 
 @Component({
   selector: 'account-page',
@@ -18,24 +19,35 @@ export class AccountPageComponent implements OnInit, OnDestroy{
   moment = moment;
   time;
   spinner = false;
+  spinnerActions = false;
   balance = 0;
   unstaked;
   actions;
   dataSource;
-  displayedColumns = ['actions'];
+  displayedColumns = [ '#', 'tx', 'date', 'name', 'data'];
   code;
   tables = [];
-  rsnRate;
+  eosRate;
   subscription;
   displayedColumnsPermissiopn = ['Permission', 'Address', 'Threshold', 'Weight'];
   dataSourcePermission;
   controlledAccount;
   tokensArray;
+  actionsTotal = 0;
+  position = 1;
+  pageIndex = 0;
+  actionsArray = [];
+  elementsLimit = 100;
+  creator;
+  actionsNotSorted;
+  frontConfig = environment.frontConfig;
 
-  constructor(private route: ActivatedRoute,
-              protected http: HttpClient,
+
+  constructor(private route: ActivatedRoute, 
+              protected http: HttpClient, 
               private MainService: MainService,
-              public dialog: MatDialog){}
+              public dialog: MatDialog){
+  }
 
   getBlockData(accountId){
       this.spinner = true;
@@ -44,7 +56,8 @@ export class AccountPageComponent implements OnInit, OnDestroy{
                           this.mainData = res;
                           this.getBalance(accountId);
                           this.time = this.moment(this.mainData.created).format('MMMM Do YYYY, h:mm:ss a');
-                          this.getActions(this.mainData.account_name);
+                          this.getActions(this.mainData.account_name, this.position);
+                          this.getAccountCreator(this.mainData.account_name);
                           this.getCode(this.mainData.account_name);
 
                           let ELEMENT_DATA: Element[] = res.permissions;
@@ -59,35 +72,65 @@ export class AccountPageComponent implements OnInit, OnDestroy{
   };
 
   getBalance(accountId){
-      this.http.get(`/api/v1/get_currency_balance/arisen.token/${accountId}/RSN`)
+      this.http.get(`/api/v1/get_currency_balance/${this.frontConfig.tokenContract}/${accountId}/${this.frontConfig.totalBalance}`)
            .subscribe((res: any) => {
-                          this.unstaked = (!res[0]) ? 0 : Number(res[0].split(' ')[0]);
+                          this.unstaked = (!res[0]) ? 0 : Number(res[0].split(' ')[0]); 
                           let staked = 0;
                           if (this.mainData.voter_info && this.mainData.voter_info.staked){
                               staked = this.mainData.voter_info.staked;
                           }
-                          this.balance = this.unstaked + staked / 10000;
-                          this.rsnRate = this.MainService.getRsnPrice();
+                          if (this.frontConfig.customBalance){
+                            this.balance = this.unstaked;
+                          } else {
+                            this.balance = (this.frontConfig.coin !== 'WAX') ? this.unstaked + staked / 10000 : this.unstaked + staked / 100000000;
+                          } 
+                          this.eosRate = this.MainService.getRixPrice();
                       },
                       (error) => {
                           console.error(error);
                       });
   }
 
-  getActions(accountName){
-      this.http.get(`/api/v1/get_actions/${accountName}/-1/-100`)
+  getActions(accountName, pos){
+      this.spinnerActions = true;
+      pos = (pos === 1) ? -1 : pos;
+      this.http.get(`/api/v1/get_actions/${accountName}/${pos}/-${this.elementsLimit}`)
            .subscribe((res: any) => {
-                          res.actions = this.sortArrayFunctions(res.actions);
-
+                          this.actionsNotSorted = res.actions;
                           if(res.actions[0] && !res.actions[0].action_trace){
                             res.actions = this.createActionsArr(res.actions);
+                            this.actionsTotal = res.actionsTotal;
                           } else {
                             res.actions.reverse();
                           }
+                          res.actions = this.sortArrayFunctions(res.actions);
+                          Array.prototype.push.apply(this.actionsArray, res.actions);
 
-                          this.actions = res;
-                          let ELEMENT_DATA: Element[] = [res];
+                          this.actions = this.actionsArray;
+                          let ELEMENT_DATA: Element[] = this.actionsArray;
                           this.dataSource = new MatTableDataSource<Element>(ELEMENT_DATA);
+
+                          this.dataSource.filterPredicate = function(data, filter: string): boolean {
+                                      return data.action_trace.act.name.toLowerCase().includes(filter) || 
+                                             data.action_trace.act.account.toLowerCase().includes(filter);
+                          };
+
+                          this.spinnerActions = false;
+                      },
+                      (error) => {
+                          this.spinnerActions = false;
+                          console.error(error);
+                      });
+  }
+  nextPage(pageIndex){
+    this.position += pageIndex;
+    this.getActions(this.mainData.account_name, this.position * this.elementsLimit);
+  }
+
+  getAccountCreator(accountName){
+      this.http.get(`/api/v1/get_actions_name/${accountName}/newaccount?sort=1`)
+           .subscribe((res: any) => {
+                          this.creator = res.actions[0];
                       },
                       (error) => {
                           console.error(error);
@@ -126,16 +169,21 @@ export class AccountPageComponent implements OnInit, OnDestroy{
        if (!data){
            return [];
        }
-       let block_nums = [];
+       let uniqieString = [];
        let result = [];
        data.forEach(elem => {
-           if (block_nums.indexOf(elem.block_num) === -1){
+           let unique = elem.action_trace.act.hex_data + elem.action_trace.trx_id;
+           if (uniqieString.indexOf(unique) === -1){
                result.push(elem);
-               block_nums.push(elem.block_num);
+               uniqieString.push(unique);
            }
        });
-       block_nums = [];
+       uniqieString = [];
        return result;
+  }
+
+  filterTokens(data){
+    let result = data.map();
   }
 
   createActionsArr(actions){
@@ -165,8 +213,8 @@ export class AccountPageComponent implements OnInit, OnDestroy{
       };
       data.forEach(elem => {
           if (elem.controlled_permission === "active"){
-             result.controlled_accounts.push(elem.controlled_account);
-          }
+             result.controlled_accounts.push(elem.controlled_account); 
+          }  
       });
       return result;
   }
@@ -178,7 +226,7 @@ export class AccountPageComponent implements OnInit, OnDestroy{
                           },
                           (error) => {
                               console.error(error);
-                          });
+                          });      
   }
 
   openDialogMemo(event, data){
@@ -196,21 +244,27 @@ export class AccountPageComponent implements OnInit, OnDestroy{
     });
   }
 
+  applyFilter(filterValue: string) {
+    this.dataSource.filter = filterValue.trim().toLowerCase();
+  }
+
 
   ngOnInit() {
     this.block = this.route.params.subscribe(params => {
+       this.actionsArray = [];
+       this.tables = [];
+       this.actions = [];
+       this.dataSource = [];
        this.accountId = params['id'];
        this.getBlockData(this.accountId);
        this.getControlledAccounts(this.accountId);
        this.getAllTokens(this.accountId);
     });
-    //this.subscription = this.MainService.getRsnPrice().subscribe(item => { this.rsnRate = item; console.log(item); });
   }
 
   ngOnDestroy() {
     this.block.unsubscribe();
-    //this.subscription.unsubscribe();
-  }
+  }	
 }
 
 
@@ -227,3 +281,17 @@ export class AccountPageComponent implements OnInit, OnDestroy{
 export class DialogDataMemo {
   constructor(@Inject(MAT_DIALOG_DATA) public data) {}
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+

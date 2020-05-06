@@ -1,15 +1,17 @@
 import { Injectable, EventEmitter, Inject } from '@angular/core';
+import { BehaviorSubject } from 'rxjs/BehaviorSubject';
+import { environment } from '../../environments/environment';
 
 @Injectable()
 export class MainService {
 
-  //rsnRateReady: EventEmitter<any> = new EventEmitter();
-  rsnRateReady = {};
+  //rixRateReady: EventEmitter<any> = new EventEmitter();
+  eosRateReady = {};
   votesToRemove;
 
   WINDOW: any = window;
 
-  rsnConfig = {
+  rixConfig = {
     chainId: "",
     httpEndpoint: "",
     expireInSeconds: 60,
@@ -21,28 +23,42 @@ export class MainService {
       error: console.error
     }*/
   };
+  ungerKey = "EOS1111111111111111111111111111111114T1Anm";
+  liveTXHide = localStorage.getItem('liveTXHide') ? true : false;
+  frontConfig = environment.frontConfig;
+
+  private messageSource = new BehaviorSubject("");
+  currentMessage = this.messageSource.asObservable();
+
+  changeMessage(message: string) {
+      this.messageSource.next(message)
+  }
 
   constructor() {}
 
-  setRsnPrice(data){
-      this.rsnRateReady = data;
+  setRixPrice(data){
+      this.eosRateReady = data;
   }
-  getRsnPrice(){
-      return this.rsnRateReady;
+  getRixPrice(){
+      return this.eosRateReady;
   }
 
   sortArray(data) {
       if(!data){
         return;
       }
-      let result = data.sort((a, b) => {
+      let result = [];
+      data.sort((a, b) => {
           return b.total_votes - a.total_votes;
-      }).map((elem, index) => {
-          let rsn_votes = Math.floor(this.calculateRsnFromVotes(elem.total_votes));
+      }).forEach((elem, index) => {
+          if (elem.producer_key === this.ungerKey){
+              return;
+          }
+          let eos_votes = Math.floor(this.calculateEosFromVotes(elem.total_votes));
           elem.all_votes = elem.total_votes;
-          elem.total_votes = Number(rsn_votes).toLocaleString();
-          elem.index = index + 1;
-          return elem;
+          elem.total_votes = Number(eos_votes).toLocaleString();
+          
+          result.push(elem);
       });
       return result;
   }
@@ -58,11 +74,12 @@ export class MainService {
             }
             return acc;
       }, 0);
-      data.forEach((elem) => {
-        elem.rate    = (elem.all_votes / totalProducerVoteWeight * 100).toLocaleString();
-        elem.rewards = this.countRewards(elem.all_votes, elem.index, totalProducerVoteWeight);
+      data.forEach((elem, index) => {
+        elem.index   = index + 1;
+        elem.rate    = (!totalProducerVoteWeight) ? 0 : (elem.all_votes / totalProducerVoteWeight * 100).toLocaleString();
+        elem.rewards = (!totalProducerVoteWeight) ? 0 : this.countRewards(elem.all_votes, elem.index, totalProducerVoteWeight);
       });
-
+      
       return data;
   }
 
@@ -70,35 +87,41 @@ export class MainService {
     let position = index;
     let reward = 0;
     let percentageVotesRewarded = total_votes / (totalProducerVoteWeight - this.votesToRemove) * 100;
-
+     
      if (position < 22) {
-       reward += 318;
+       reward = (this.frontConfig.coin === 'RIX') ? reward + 443 : 4909;
      }
-     reward += percentageVotesRewarded * 200;
+     if (this.frontConfig.coin === 'RIX'){
+       reward += percentageVotesRewarded * 200;
+     }
      if (reward < 100) {
        reward = 0;
      }
      return Math.floor(reward).toLocaleString();
   }
 
-  calculateRsnFromVotes(votes){
-      let date = +new Date() / 1000 - 946684800;
+  calculateEosFromVotes(votes){
+      let date = +new Date() / 1000 - 946684800; // 946... start timestamp
+      if (this.frontConfig.coin === 'WAX'){
+        let weight = parseInt(`${ date / (86400 * 7) }`, 10) / 13;
+        return votes / (2 ** weight) / 100000000;
+      }
       let weight = parseInt(`${ date / (86400 * 7) }`, 10) / 52; // 86400 = seconds per day 24*3600
       return votes / (2 ** weight) / 10000;
   };
-
+ 
 
   getGlobalNetConfig(){
     if (!this.getCookie("netsConf")){
-      this.rsnConfig.chainId = "136ce1b8190928711b8bb50fcae6c22fb620fd2c340d760873cf8f7ec3aba2b3";
-      this.rsnConfig.httpEndpoint = "http://greatchains.arisennodes.io";
-      return this.WINDOW.Rsn(this.rsnConfig);
+      this.rixConfig.chainId = "136ce1b8190928711b8bb50fcae6c22fb620fd2c340d760873cf8f7ec3aba2b3";
+      this.rixConfig.httpEndpoint = "http://greatchains.arisennodes.io";
+      return this.WINDOW.Rix(this.rixConfig);
     }
       let cookie = JSON.parse(this.getCookie("netsConf"));
       let net = localStorage.getItem("netName") || "mainNet";
-      this.rsnConfig.chainId = cookie[net].chainId;
-      this.rsnConfig.httpEndpoint = cookie[net].httpEndpoint;
-      return this.WINDOW.Rsn(this.rsnConfig);
+      this.rixConfig.chainId = cookie[net].chainId;
+      this.rixConfig.httpEndpoint = cookie[net].httpEndpoint;
+      return this.WINDOW.Eos(this.rixConfig);
   }
 
   getCookie(name) {

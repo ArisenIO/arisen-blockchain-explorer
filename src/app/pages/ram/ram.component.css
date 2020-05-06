@@ -14,7 +14,7 @@ small {
 }
 .analytics-header-right{
 	margin-bottom: 7px;
-	margin-top: 40px;
+	margin-top: 30px;
 	color: #9f9fa1;
 	font-size: 14px;
 }
@@ -42,9 +42,6 @@ mat-tab-group{
 .top-ten{
 	margin-top: 10px;
 }
-.button-menu-container{
-	margin-top: 45px;
-}
 .alert-button{
 	margin-right: 25px;
 }
@@ -52,3 +49,5 @@ mat-tab-group{
 	margin-top: 20px;
     margin-bottom: 0px;
 }
+
+

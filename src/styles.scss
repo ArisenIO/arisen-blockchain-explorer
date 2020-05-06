@@ -1,0 +1,753 @@
+/* You can add global styles to this file, and also import other style files */
+/* You can add global styles to this file, and also import other style files */
+@import "~@angular/material/prebuilt-themes/indigo-pink.css";
+@import "assets/css/grid12.css";
+@import "assets/css/cryptofont.min.css";
+@import "~leaflet/dist/leaflet.css";
+/*@import "https://use.fontawesome.com/releases/v5.0.6/css/all.css"*/
+
+@font-face {
+  font-family: Crypto;
+  src: url(assets/fonts/cryptofont-webfont.ttf);
+}
+
+@font-face {
+  font-family: ClanProBook;
+  src: url(assets/fonts/ClanPro-Book.otf);
+}
+
+@font-face {
+  font-family: ClanProNews;
+  src: url(assets/fonts/ClanPro-News.otf);
+}
+
+html {
+    position: relative;
+    width: 100vw;
+    min-height: 100%;
+    height: auto !important;
+}
+body{
+	margin: 0 !important;
+	font-family: 'ClanProNews' !important;
+	overflow-x: hidden;
+	height: auto !important;
+	padding-bottom: 200px;
+	-webkit-font-smoothing: antialiased;
+	background: #f8f8f8;
+}
+.mat-table{
+	font-family: 'ClanProNews' !important;
+}
+.mat-cell{
+	font-size: 13px !important;
+}
+a{
+	cursor: pointer;
+}
+*{
+	outline: none;
+}
+.btn-generate{
+	width: 100%;
+    margin-top: 15px !important;
+    padding: 5px !important;
+    font-size: 16px;
+}
+.no-padding-right{
+	padding-right: 0 !important;
+}
+.padding-left-no{
+	padding-left: 0 !important;
+}
+.padding-right-no{
+	padding-left: 0 !important;
+}
+.mat-fab.mat-primary, .mat-mini-fab.mat-primary, .mat-raised-button.mat-primary{
+	background: linear-gradient(to right,#3fa3eb,#3568e4);
+	background: -webkit-gradient(linear,left top,right top,from(#3fa3eb),to(#3568e4));
+}
+.mat-fab.mat-warn, .mat-mini-fab.mat-warn, .mat-raised-button.mat-warn { 
+	background: linear-gradient(to right,#ff9048,#f44336);
+	background: -webkit-gradient(linear,left top,right top,from(#ff9048),to(#f44336)); 
+}
+.mat-fab.mat-accent, .mat-mini-fab.mat-accent, .mat-raised-button.mat-accent{
+	background: linear-gradient(to right,#ff9389,#ff8ea4);
+	background: -webkit-gradient(linear,left top,right top,from(#ff9389),to(#ff8ea4)); 
+}
+.text-right{
+	text-align: right;
+}
+.row, .container{
+	position: relative;
+}
+.progress-bar-usage{
+	margin-top: 6px;
+	height: 8px !important;
+}
+.strong-content{
+	color: #333;
+}
+.nav-active{
+	color: #71d479 !important;
+}
+.account-cpu .mat-progress-bar-fill::after {
+  	background-color: #71d479;
+}	
+.account-cpu .mat-progress-bar-buffer {
+	background: #cdefd0;
+}
+.account-net .mat-progress-bar-fill::after {
+  	background-color: #f0b90b;
+}	
+.account-net .mat-progress-bar-buffer {
+	background: #ffe9a5;
+}
+.account-ram-usage .mat-progress-bar-fill::after {
+  	background-color: #FF9149;
+}	
+.account-ram-usage .mat-progress-bar-buffer {
+	background: #ffdac3;
+}
+.account-ram .mat-progress-bar-fill::after {
+  	background-color: #0794ec;
+}	
+.account-ram .mat-progress-bar-buffer {
+	background: #98d7ff;
+}
+.text-center{
+	text-align: center !important;
+}
+.no-padding{
+	padding: 0;
+}
+.color-grey-text{
+	color: #b2b6be;
+}
+.color-green{
+	color: #71d479 !important;
+	text-decoration: none;
+}
+.arrows-prev-next{
+	font-size: 14px !important;
+}
+.arrows-prev-next a:nth-child(2) {
+	margin-left: 10px;
+}   
+.color-red{
+	color: red !important;
+}
+.color-grey{
+	color: #333 !important;
+	text-decoration: none;
+}
+.padding-left{
+	padding-left: 20px;
+}
+.color-red{
+	color: #e36956 !important;
+}
+.icon-rignt{
+	margin-right: 5px;
+}
+.container{
+	width: 1280px;
+}
+.spinner-container{
+	width: 100%;
+    height: 100%;
+    display: block;
+    position: absolute;
+    background: rgba(248, 248, 248, 0.8);
+    z-index: 1000;
+}
+.spinner-container .mat-spinner{
+	margin-left: -50px;
+	left: 50%;
+	top: 20%;
+}
+.spinner-color circle, .mat-spinner circle {
+	stroke: #71d479;
+}
+.simple-notification-wrapper{
+	z-index: 100000 !important;
+}
+.market-header{
+	font-family: 'ClanProNews';
+	color: #23232a;
+	margin-top: 40px;
+}
+.coin-page-header .mat-header-row, .mat-row{
+	min-height: 70px !important;
+}
+
+
+/* Global style for forms signup login reset pass */
+.sign-up{
+	background-color: #3f48b9;
+	font-weight: normal;
+	font-family: 'ClanProNews';
+}
+.sign-up:hover{
+	background-color: #3b43a7 !important;
+	color: #fff !important;
+}
+.dialog-main-container{
+	padding: 20px 0;
+	position: relative;
+}
+.top-text-header{
+	font-size: 20px;
+	color: #000;
+	text-align: center;
+	margin-top: 10px;
+}
+.top-text-small{
+	font-size: 15px;
+	text-align: center;
+	color: #98999f;	
+	padding: 10px 50px;
+}
+.social-buttons{
+	margin-top: 10px;
+	margin-bottom: 20px;
+	padding: 5px 120px;
+}
+.main-form{
+	padding: 5px 120px;
+}
+.btn-social{
+	padding: 9px 20px;
+	margin-top: 11px;
+	display: block;
+	text-align: center;
+	border: 1px solid #e5e6e8;
+	border-radius: 4px;
+	cursor: pointer;
+}
+.main-form .sign-up-btn{
+    float: right;
+    margin-top: 11px;
+    background: #3c5de0;
+    font-weight: 300;
+    padding: 3px 40px;
+    font-family: 'ClanProNews';
+}
+.facebook-btn{
+	background-color: #395697;
+	color: #fff;
+}
+.privacy-terms{
+    margin-top: 25px;
+    color: #a8a8a8;
+    font-size: 13px;
+    line-height: 21px;
+}
+.already-has-account{
+	font-size: 16px;
+    margin-top: 40px;
+    padding-bottom: 15px;
+    padding-top: 15px;
+    text-align: center;
+    box-shadow: 4px 4px 7px #f2f2f3;
+}
+.link{
+	color: #5473ed;
+	text-decoration: none;
+}
+.link:hover{
+	text-decoration: underline;
+	cursor: pointer;
+}
+.terms-link{
+	color: #333;
+	text-decoration: none;
+}
+.terms-link:hover{
+ 	text-decoration: underline;
+}
+.main-form mat-form-field{
+	margin-bottom: 5px;
+}
+.main-form .mat-form-field-ripple{
+	background-color: #3c5de0 !important;
+}
+.main-form .mat-form-field-invalid .mat-form-field-ripple{
+	background-color: #e36956 !important;
+}
+.main-form .mat-form-field-underline{
+	background-color: #e5e6e8 !important;
+}
+.main-form .mat-form-field-invalid .mat-form-field-placeholder{
+	color: #e36956 !important;
+}
+.main-form .mat-form-field-placeholder{
+	font-size: 14px;
+}
+.icon-close{
+	color: #d6d6d7;
+    font-size: 22px;
+    display: table;
+    position: absolute;
+    right: 0;
+    top: -5px;
+    cursor: pointer;
+}
+.forgot-pass{
+	float: left;
+    font-size: 13px;
+    display: table;
+    margin-top: 22px;
+}
+.new-pass{
+	margin-bottom: 28px;
+}
+.producer-link{
+	margin-left: 5px;
+	display: table;
+}
+/* End Global style for forms signup login reset pass */
+
+/* Customize notify messages */
+.simple-notification-wrapper.top{
+	top: 70px !important;
+}
+.simple-notification .sn-title{
+	font-size: 18px !important;
+	font-family: 'ClanProNews';
+}
+.simple-notification .sn-content{
+	font-size: 14px !important;
+	font-family: 'ClanProNews';
+}
+.simple-notification .icon{
+	display: none;
+}
+/*.simple-notification.error{
+	background-color: #e36956 !important; 
+}
+.simple-notification.success{
+	background-color: #71d479 !important;
+}
+ End Customize notify messages */
+.telegram-button{
+	font-size: 18px !important;
+	padding: 6px 40px 6px 15px !important;
+}
+.telegram-button:hover{
+	background: rgba(0,0,0,0) !important;
+	color: #6de29a !important;
+}
+.twitter-button{
+	padding: 6px 15px 6px 15px !important;
+}
+
+
+small{
+	color: #9f9fa1;
+}
+.block-info-line{
+	border-top: 1px solid #fafafa;
+	padding-top: 10px;
+	margin-top: 5px;
+	margin-bottom: 5px;
+}
+.block-info-header{
+	font-size: 13px;
+	-webkit-font-smoothing: auto;
+}
+
+/* Table style */
+.example-container {
+  display: flex;
+  flex-direction: column;
+  min-width: 100%;
+}
+.main-table{
+	position: relative;
+	box-shadow: none;
+	font-family: 'ClanProNews';
+	font-weight: 400;
+	background: #fff;
+}
+.main-table-latest-actions{
+	min-height: 446px;
+}
+.main-table .mat-header-row{
+	background-color: #f1f1f2;
+	border: none;
+}
+.main-table .mat-header-cell{
+	color: #89898f;
+	font-family: 'ClanProNews';
+}
+.main-table .mat-cell, .main-table .mat-header-cell{
+	overflow: inherit !important;
+}
+.main-table .mat-row{
+    min-height: 60px !important;
+    border-bottom: 0px solid #f4f4f4;
+    margin-bottom: 5px;
+    -webkit-box-shadow: 2px 4px 2px #f4f4f4;
+    box-shadow: 1px 1px 1px #f4f4f4;
+}
+.marketcap-container{
+	color: #9f9fa1;
+	font-size: 15px;
+}
+.color-light-grey{
+	color: #9f9fa1;
+}
+.volume-coins-container{
+	margin-top: 5px;
+}
+
+.material-icons{
+	font-size: 15px;
+    padding-top: 1px;
+    padding-right: 2px;
+    float: left;
+    display: table;
+}
+.fa-percent{
+    font-size: 11px;
+}
+.change-container div{
+	display: table;
+	font-size: 14px;
+}
+
+.main-table-volume{
+	width: 80%;
+	text-align: right;
+}
+.main-spinner{
+	width: 100%;
+	background-color: rgba(248, 248, 248, 0.8);
+	height: 100% !important;
+	position: absolute;
+	top: 0%;
+	height: 0%;
+	z-index: 1000;
+}
+.main-spinner .mat-spinner{
+	margin: 100px auto;
+}
+.example-header {
+  min-height: 64px;
+  padding: 8px 24px 0;
+}
+.mat-form-field {
+  font-size: 14px;
+  width: 100%;
+}
+.crypto-img{
+	margin-right: 5px;
+}
+.currency-index{
+	margin-right: 5px;
+	width: 23px;
+	display: table;
+	float: left;
+}
+.change_green{
+	color: #1f9575;
+}
+.change_red{
+	color: #e95f47;
+}
+.highcharts-credits{
+	display: none !important;
+}
+.loading-charts{
+	background-color: #fafafa;
+	height: 50px;
+	width: 100%;
+}
+.custom-coin-link{
+	color: #313335;
+    text-decoration: none;
+    font-family: ClanProNews;
+    font-size: 17px;
+    font-weight: bold;
+}
+.custom-coin-link:hover{
+	text-decoration: underline;
+}
+.high-trend{
+	margin-bottom: 5px;
+}
+.high_low_text{
+	font-size: 14px;
+}
+.tx-hash{
+	overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    width: 120px !important;
+    display: block !important;
+    cursor: pointer;
+}
+
+.memo-data{
+	overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    width: 120px !important;
+    display: block !important;
+    cursor: pointer;
+    float: left
+}
+.memo-data-action{
+	overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    width: 360px !important;
+    display: block !important;
+    cursor: pointer;
+    float: left
+}
+action-viewer{
+	display: flex;
+}
+.icon-memo-open{
+	cursor: pointer;
+	font-weight: bold;
+	display: block;
+}
+
+.block-trx-table{
+}
+.block-trx-table .mat-header-row{
+	min-height: 40px;
+}
+.actions-list{
+    padding-bottom: 15px;
+    padding-top: 15px;
+    min-height: 40px;
+    flex: 1;
+    width: auto;
+}
+.actions-main-container{
+	display: flex;
+	border-bottom: 1px solid #f7f7f7;
+	padding-left: 20px;
+	font-size: 13px;
+	font-family: 'ClanProNews';
+}
+.account-action-name{
+	flex: 2 !important;
+}
+.number-flex{
+	flex: 0.5 !important;
+}
+.actions-name-account{
+	margin-left: 40px;
+}
+.actions-list-container{
+	width: 450px;
+	flex: 5 !important;
+}
+.main-container-actions .fa-long-arrow-right {
+	margin-left: 10px;
+	color: #333;
+}
+
+.mat-tab-group.mat-primary .mat-ink-bar, .mat-tab-nav-bar.mat-primary .mat-ink-bar{
+	background-color: #71d479 !important;
+}
+.mat-tab-body-content{
+	padding: 25px 15px;
+}
+.token-tranfer-table{
+	font-size: 13px;
+	color: #89898f;
+	background-color: #f1f1f2;
+    border: none;
+}
+.top-number-analytics{
+	flex: 0.3 !important;
+}
+.filter-header{
+	margin-top: 40px;
+}
+.mat-focused .mat-form-field-label {
+	color: #3568e4 !important;
+}
+
+.mat-form-field-ripple {
+    background: -webkit-gradient(linear,left top, right top,from(#3fa3eb),to(#3568e4));
+    background: linear-gradient(to right,#3fa3eb,#3568e4);
+    background: -webkit-gradient(linear,left top,right top,from(#3fa3eb),to(#3568e4));
+}
+
+.main-page-table-producers .container,
+.main-page-table-producers .col-md-12{
+	padding-left: 0;
+}
+.load-more{
+	margin: 10px auto;
+}
+.progress-bar-votes {
+	margin-top: 50px;
+	position: relative;
+}
+.progress-bar-votes .progress-bar-usage{
+	height: 15px !important;
+	margin-left: -30px;
+}
+.progress-bar-votes span{
+    position: absolute;
+    font-size: 11px;
+    top: 7px;
+    left: -7px;
+    color: #fff;
+    font-weight: bold;
+}
+.select-network button{
+	border: 1px solid #29292d;
+    border-radius: 5px;
+    text-transform: none !important;
+    letter-spacing: 1px !important;
+}
+.select-network button i{
+	margin-top: -4px;
+	margin-left: 5px;
+}
+
+.ram-scale{
+	height: 300px;
+}
+.ram-page{
+	height: 400px;
+}
+.button-menu-container{
+	margin-top: 54px;
+}
+.widget-chart-btn{
+    padding: 5px 7px;
+    color: #9f9fa1;
+    margin-left: 8px;
+    font-size: 13px;
+    background: #f1f1f1;
+    border-radius: 4px;
+    cursor: pointer;
+}
+.widget-btn-active, .widget-chart-btn:hover{
+	background: linear-gradient(to right, #3fa3eb, #3568e4) !important;
+	color: #fff;
+}
+.live-actions{
+	margin-right: 15px;
+	cursor: pointer;
+}
+
+@media only screen and (max-width: 1280px) {
+	.container{
+    	width: 100%;
+    }
+    .customize-containers-active{
+    	margin-left: 2px;
+    }
+}
+@media only screen and (max-width: 1107px) {
+	.container{
+    	width: 100%;
+    }
+    .grid-cs-5-inline{
+    	width: 18.5% !important;
+    }
+    .customize-containers-active{
+    	margin-left: 4px;
+    }
+}
+
+@media only screen and (max-width: 600px) {
+    .container{
+    	width: 100%;
+    }
+    .mobile-no{
+    	display: none !important;
+    }
+    .logo{
+    	padding: 9px 20px !important;
+    }
+    .main-search input{
+		width: 150px !important;
+		border: none !important;
+    }
+    .grid-cs-5-inline{
+    	width: 47.6% !important;
+    	margin-left: 4px;
+    	margin-top: 8px;
+    }
+    .customize-containers-active{
+    	width: 97% !important;
+    }
+    .main-chart-cust-container{
+    	padding-top: 0px !important;
+    	padding-bottom: 10px !important;
+    }
+    .main-nav-middle{
+    	padding-left: 10px !important;
+    	margin-top: 0px;
+    	margin-bottom: 5px;
+    }
+    .main-nav-middle .mat-button{
+    	padding: 0 !important;
+    }
+    .mat-table{
+    	width: 650px;
+    }
+    .example-container{
+    	overflow: scroll;
+    }
+    .big-table, .actions-main-container{
+		width: 900px;
+    }
+    .tx-mobile-hash{
+    	overflow: hidden;
+    	white-space: nowrap;
+    	text-overflow: ellipsis;
+    	width: 100%;
+    	display: block;
+    	cursor: pointer;
+    }
+    footer .pull-left{
+		display: none;
+    }
+    footer ul{
+    	padding-left: 0 !important;
+    }
+    .progress-bar-votes .progress-bar-usage{
+    	margin-left: 0;
+    }
+    .progress-bar-votes span{
+    	top: 1px;
+    	left: 20px;
+    }
+    .progress-bar-votes{
+    	margin-top: 15px;
+    }
+    .filter-header{
+    	margin-top: 15px;
+    }
+    .ram-scale{
+		height: 250px;
+	}
+	.ram-page{
+		height: 250px;
+	}
+	h1{
+		font-size: 1.5rem;
+	}
+	.button-menu-container{
+		margin-top: 20px;
+	}
+}
+
+
+
+
+html, body { height: 100%; }
+body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }

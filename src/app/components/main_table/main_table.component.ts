@@ -1,4 +1,4 @@
-import { Component, ViewChild, OnInit, Inject, Optional, PLATFORM_ID  } from '@angular/core';
+import { Component, ViewChild, OnInit, Inject, Optional, PLATFORM_ID, OnDestroy  } from '@angular/core';
 import { MatPaginator, MatTableDataSource, MatSort } from '@angular/material';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs/Rx';
@@ -22,7 +22,7 @@ export interface Element {
   templateUrl: './main_table.component.html',
   styleUrls: ['./main_table.component.css']
 })
-export class MainTableComponent implements OnInit{
+export class MainTableComponent implements OnInit, OnDestroy{
   
   curve;
   currMap: any;
@@ -43,7 +43,7 @@ export class MainTableComponent implements OnInit{
   @ViewChild(MatSort) sort: MatSort;*/
 
   constructor(protected http: HttpClient,
-              @Inject(PLATFORM_ID) private platformId: Object, private socket : Socket, private MainService: MainService) {
+              @Inject(PLATFORM_ID) private platformId: Object, private socket : Socket, public mainService: MainService) {
   }
 
   getData() {
@@ -52,7 +52,7 @@ export class MainTableComponent implements OnInit{
                   .subscribe(
                       (res: any) => {
                           this.mainData = res;
-                          let ELEMENT_DATA: Element[] = this.MainService.sortArray(this.mainData);
+                          let ELEMENT_DATA: Element[] = this.mainService.sortArray(this.mainData);
                           this.dataSource = new MatTableDataSource<Element>(ELEMENT_DATA);
 
                           let ELEMENT_DATA_TX: Element[] = this.createTransactionsArray(this.mainData);
@@ -113,13 +113,17 @@ export class MainTableComponent implements OnInit{
       this.getData();
       this.socket.on('get_last_blocks', (data) => {
           this.mainData = data;
-          let ELEMENT_DATA: Element[] = this.MainService.sortArray(this.mainData);
+          let ELEMENT_DATA: Element[] = this.mainService.sortArray(this.mainData);
           this.dataSource = new MatTableDataSource<Element>(ELEMENT_DATA);
 
           let ELEMENT_DATA_TX: Element[] = this.createTransactionsArray(this.mainData);
           this.dataSourceTrx = new MatTableDataSource<Element>(ELEMENT_DATA_TX);
 
       });
+  }
+
+  ngOnDestroy(){
+    this.socket.removeAllListeners('get_last_blocks');
   }
 }
 

@@ -1,7 +1,7 @@
 /*
-  Created by jared
+  Created by rixwebnetbp1 
 */
-require('appmetrics-dash').monitor();
+//require('appmetrics-dash').monitor();
 const express       = require('express');
 const path          = require('path');
 const cookieParser  = require('cookie-parser');
@@ -12,18 +12,17 @@ const compression   = require('compression');
 const request       = require('request');
 const async			    = require('async');
 
-const config        = require('../config');
-const mariaDB       = require('mariasql');
+const configName    = (process.env.CONFIG) ? process.env.CONFIG : 'config';
+const config        = require(`../${configName}`);
 
 const mongoose      = require("mongoose");
 mongoose.set('useCreateIndex', true);
 
-const RSN           = require('arisenjsv1');
-global.rsn          = RSN(config.rsnConfig);
+const RIX           = require('@arisencore/api');
+global.rix          = RIX(config.rixConfig);
 
-const log4js        = require('log4js');
-log4js.configure(config.logger);
-const log           = log4js.getLogger('server');
+const { logWrapper } = require('./utils/main.utils');
+const log            = new logWrapper('server');
 
 const customSlack   = require('./modules/slack.module');
 const logSlack      = customSlack.configure(config.loggerSlack.alerts);
@@ -35,18 +34,25 @@ process.on('uncaughtException', (err) => {
 process.setMaxListeners(0);
 
 mongoose.Promise = global.Promise;
-
 const mongoMain = mongoose.createConnection(config.MONGO_URI, config.MONGO_OPTIONS,
  (err) => {
     if (err){
       log.error(err);
       process.exit(1);
     }
-    log.info('[Connected to Mongo RSN] : 27017');
+    log.info('[Connected to Mongo RIX] : 27017');
 });
+mongoose.set('useCreateIndex', true);
+
+/**
+ * PM2 Metrics
+ */
+const pm2 = require('@pm2/io');
+let metrics = {
+   users: pm2.metric({name: 'realtimeUsers'})
+};
 
 const app  = express();
-
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(cookieParser());
@@ -70,17 +76,13 @@ server.on('listening', onListening);
 
 //========= socket io connection
 const io  = require('socket.io').listen(server);
-require(`./api/rsn.api.${config.apiV}.socket`)(io, mongoMain);
+require(`./api/rix.api.${config.apiV}.socket`)(io, mongoMain, metrics);
 
 if (config.CRON){
-    require('./crons/main.cron')();
+    require('./daemons/init')();
 }
 if (config.telegram.ON){
     require('./daemons/ram.bot.daemon')(mongoMain);
-}
-if (config.MARIA_DB_ENABLE){
-    const MARIA = new mariaDB(config.MARIA_DB);
-    require(`./api/rsn.api.${config.apiV}.tokens`)(app, log, MARIA);
 }
 
 app.use(function(req,res,next){
@@ -93,7 +95,7 @@ app.use(function(req,res,next){
 app.use(express.static(path.join(__dirname, '../dist')));
 
 require('./router/main.router')(app, config, request, log);
-require(`./api/rsn.api.${config.apiV}`)(app, config, request, log, mongoMain);
+require(`./api/rix.api.${config.apiV}`)(app, config, request, log, mongoMain);
 
 /*app.get('*', (req, res) => {
     res.sendFile(path.join(__dirname, '../dist/index.html'));
@@ -111,9 +113,10 @@ app.use((err, req, res, next) => {
   // set locals, only providing error in development
   res.locals.message = err.message;
   res.locals.error = req.app.get('env') === 'development' ? err : {};
-  console.error('===== Page not Found ', err);
+  //console.log('Url not found', req.url);
+  //console.error('===== Page not Found ', err);
   // render the error page
-  res.status(err.status || 500).redirect('/notfound');
+  res.status(err.status || 500).end();
 });
 
 function normalizePort(val) {

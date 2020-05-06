@@ -1,5 +1,5 @@
 /*
-   Created by jared
+   Created by eoswebnetbp1
 */
 'use strict';
 
@@ -18,7 +18,7 @@ function slackAppender(config) {
 
     slack.chat.postMessage(data, (err) => {
       if (err) {
-        console.error('log4js:slack - Error sending log to slack: ', err);
+        console.error('SLACK - Error sending log to slack: ', err);
       }
     });
   };

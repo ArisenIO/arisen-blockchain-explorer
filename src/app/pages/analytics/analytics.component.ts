@@ -6,6 +6,7 @@ import * as moment from 'moment';
 import * as shape from 'd3-shape';
 import { Socket } from 'ng-socket-io';
 import { NotificationsService } from 'angular2-notifications';
+import { environment } from '../../../environments/environment';
 
 @Component({
   selector: 'analytics-page',
@@ -17,7 +18,7 @@ export class AnalyticsPageComponent implements OnInit{
   spinner = false;
   displayedColumns = ['#', 'Name', 'Balance', 'Staked', 'Unstaked'];
   dataSource;
-  rsnToInt = Math.pow(10, 13);
+  eosToInt = Math.pow(10, 13);
   allvotes;
   globalStat;
   curve = shape.curveMonotoneX;
@@ -36,8 +37,8 @@ export class AnalyticsPageComponent implements OnInit{
       autoScale : true,
       timeline: true,
       fitContainer : true
-  };
-
+  }; 
+  frontConfig = environment.frontConfig;
   trx;
   actions;
   pieChart;
@@ -52,8 +53,10 @@ export class AnalyticsPageComponent implements OnInit{
                       (res: any) => {
                           this.mainData = res;
                           this.pieChart = this.createPieChart(this.mainData);
+                          
                           let ELEMENT_DATA: Element[] = this.mainData;
                           this.dataSource = new MatTableDataSource<Element>(ELEMENT_DATA);
+
                           this.spinner = false;
                       },
                       (error) => {
@@ -93,7 +96,7 @@ export class AnalyticsPageComponent implements OnInit{
      this.trx = [];
      this.actions = [];
      data.forEach(elem => {
-           this.trx.push({name: new Date(`${elem._id.year}/${elem._id.month}/${elem._id.dayOfMonth}`),
+           this.trx.push({name: new Date(`${elem._id.year}/${elem._id.month}/${elem._id.dayOfMonth}`), 
                           value: elem.transactions[elem.transactions.length - 1] - elem.transactions[0]  });
            this.actions.push({name: new Date(`${elem._id.year}/${elem._id.month}/${elem._id.dayOfMonth}`),
                               value: elem.actions[elem.actions.length - 1] - elem.actions[0] });
@@ -107,7 +110,7 @@ export class AnalyticsPageComponent implements OnInit{
             return;
         }
         let result = data.map(elem => {
-             return { name: elem.account_name, value: Math.floor(elem.balance_rsn) };
+             return { name: elem.account_name, value: Math.floor(elem.balance_eos) }; 
         });
         result.shift();
         return result;
@@ -119,3 +122,10 @@ export class AnalyticsPageComponent implements OnInit{
      this.getChart();
   }
 }
+
+
+
+
+
+
+

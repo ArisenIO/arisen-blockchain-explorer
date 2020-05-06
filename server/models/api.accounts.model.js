@@ -1,5 +1,5 @@
 /*
-   Created by jared
+   Created by rixwebnetbp1
 */
 var mongoose = require('mongoose');
 mongoose.Promise = global.Promise;
@@ -9,11 +9,11 @@ var TABLE_NAME = 'Accounts';
 var MODEL;
 
 var API = new mongoose.Schema({
-  account_name: {
+  account_name: { 
     type: String,
     index: true
   },
-  balance: {
+  balance: { 
     type: Array
   },
   staked: {
@@ -24,11 +24,19 @@ var API = new mongoose.Schema({
     type: Number,
     index: true
   },
-  balance_rsn: {
+  balance_rix: {
     type: Number,
     index: true
   },
-  created: {
+  ram_quota: {
+    type: Number,
+    index: true
+  },
+  ram_usage: {
+    type: Number,
+    index: true
+  },
+  created: { 
     type: Date,
     default: Date.now
   }
@@ -44,3 +52,6 @@ module.exports = function (connection) {
   }
   return MODEL;
 };
+
+
+
