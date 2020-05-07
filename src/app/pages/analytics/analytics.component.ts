@@ -110,7 +110,7 @@ export class AnalyticsPageComponent implements OnInit{
             return;
         }
         let result = data.map(elem => {
-             return { name: elem.account_name, value: Math.floor(elem.balance_eos) }; 
+             return { name: elem.account_name, value: Math.floor(elem.balance_rsn) }; 
         });
         result.shift();
         return result;
