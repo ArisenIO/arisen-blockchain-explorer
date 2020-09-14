@@ -28,6 +28,10 @@ var API = new mongoose.Schema({
     type: Number,
     index: true
   },
+  balance_rix: {
+    type: Number,
+    index: true
+  },
   ram_quota: {
     type: Number,
     index: true

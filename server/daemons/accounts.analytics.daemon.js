@@ -56,7 +56,7 @@ function findBalanceAndUpdate(account, callback) {
       }
 
  	  rix.getCurrencyBalance({
-      			code: 'rixio.token',
+      			code: 'arisen.token',
       			account: account.account_name
 			}).then(balance => {
 	   	 		accInfo.balance = Array.isArray(balance) ? balance : [];

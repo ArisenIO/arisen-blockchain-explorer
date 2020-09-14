@@ -66,8 +66,3 @@ async function saveAccounts (data){
 }
 
 getAccountAggregation();
-
-
-
-
-
