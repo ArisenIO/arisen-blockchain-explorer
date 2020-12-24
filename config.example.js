@@ -1,6 +1,3 @@
-/*
-  App configuration example created by eoswebnetbp1
-*/
 const path = require('path');
 let config = {};
 
@@ -8,20 +5,22 @@ let config = {};
 config.PROD = false;
 
 config.toInt = 10000;
-config.coin = 'EOS';
+config.coin = 'RIX';
 
 // mongo uri and options
-config.MONGO_URI = process.env.MONGO_URI || 'mongodb://localhost:27017/EOSweb';
+config.MONGO_URI = process.env.MONGO_URI || 'mongodb://localhost:27017/ArisenExplorer';
 config.MONGO_OPTIONS = {
     socketTimeoutMS: 30000,
     keepAlive: true,
     reconnectTries: 30000,
-    useNewUrlParser: true
+    useNewUrlParser: true,
+    useUnifiedTopology: true,
+    useFindAndModify: false
 };
 
 // cron processes (aggregation of main stat - actions, transactions, accounts, analytics)
 config.CRON = false;
-config.CRON_API = 'https://public.eosinfra.io';
+config.CRON_API = 'https://greatchains.arisennodes.io';
 
 // anable TPS APS daemon aggregation
 config.TPS_ENABLE = true;
@@ -35,22 +34,27 @@ config.producerJSON = 'bp.json';
 
 // telegram alert bot (depreceted)
 config.telegram = {
-  ON: false,
-  TOKEN: '',
+  ON: true,
+  TOKEN: '818664401:AAHwB3g88TVLzTidKKX4vhX4zYH58E3EaUs',
   TIME_UPDATE: 5000
 };
 
 // reserve nodes
 config.endpoints = [
-      'http://bp.cryptolions.io',
-      'https://eos.greymass.com',
-      'https://public.eosinfra.io', 
-      'http://eosbp-0.atticlab.net'
+      'https://greatchains.arisennodes.io'
 ];
+config.rixInfoConfigs = {
+    mainNet: {
+      chainId: "136ce1b8190928711b8bb50fcae6c22fb620fd2c340d760873cf8f7ec3aba2b3",
+      httpEndpoint: "https://greatchains.arisennodes.io",
+      name: "Main Net",
+      key: "mainNet"
+    },
+};
 
-// eosjs
-config.eosConfig = {
-  chainId: "aca376f206b8fc25a6ed44dbdc66547c36c6c33e3a119ffbeaef943642f0e906",
+// rixjs
+config.rixConfig = {
+  chainId: "136ce1b8190928711b8bb50fcae6c22fb620fd2c340d760873cf8f7ec3aba2b3",
   keyProvider: "",
   httpEndpoint: config.endpoints[0],
   expireInSeconds: 60,
@@ -61,15 +65,21 @@ config.eosConfig = {
     error: console.error
   }
 };
+// ArisenID wallet
+config.walletAPI = {
+    host: 'https://greatchains.arisennodes.io',
+    port: '',
+    protocol: 'https'
+};
 
 // api url for producers list
-config.customChain = 'https://nodes.get-scatter.com';
+config.customChain = 'https://greatchains.arisennodes.io';
 
 // api url for history
-config.historyChain = 'https://eos.greymass.com';
+config.historyChain = 'https://greatchains.arisennodes.io';
 
 // tokens api
-config.tokensAPI = 'http://api.light.xeos.me/api/account/eos/';
+config.tokensAPI = 'https://greatchains.arisennodes.io';
 
 config.apiV = 'v1'; // api version
 config.RAM_UPDATE = 5 * 60 * 1000; // time for ram update - /api/api.*.socket
@@ -79,6 +89,69 @@ config.blockUpdateTime = 900; // mainpage upades frequency  - /api/api.*.socket 
 config.offsetElementsOnMainpage = 10; // blocks on mainpage
 config.limitAsync = 30; // max threads for async.js module  
 config.updateTPS = 1000;
+
+// log4js
+config.logger = {
+    appenders: {
+      out:  {
+            type: 'stdout'
+      },
+      server: {
+        type: 'file',
+        filename: path.join(__dirname, './server/logs/server.log'),
+      },
+      socket_io: {
+        type: 'file',
+        filename: path.join(__dirname, './server/logs/socket_io.log'),
+      },
+      accounts_daemon: {
+        type: 'file',
+        filename: path.join(__dirname, './server/logs/accounts_daemon.log'),
+      },
+      accounts_analytics: {
+        type: 'file',
+        filename: path.join(__dirname, './server/logs/accounts_analytics.log'),
+      },
+      global_stat: {
+        type: 'file',
+        filename: path.join(__dirname, './server/logs/global_stat.log'),
+      },
+      ram_bot: {
+        type: 'file',
+        filename: path.join(__dirname, './server/logs/ram_bot.log'),
+      }
+    },
+    categories: {
+        default:       {
+          appenders: ['out'],
+          level:     'trace'
+        },
+        server:  {
+          appenders: ['out', 'server'],
+          level:     'trace'
+        },
+        socket_io:  {
+          appenders: ['out', 'socket_io'],
+          level:     'trace'
+        },
+        accounts_daemon:  {
+          appenders: ['out', 'accounts_daemon'],
+          level:     'trace'
+        },
+        accounts_analytics:  {
+          appenders: ['out', 'accounts_analytics'],
+          level:     'trace'
+        },
+        global_stat:  {
+          appenders: ['out', 'global_stat'],
+          level:     'trace'
+        },
+        ram_bot:  {
+          appenders: ['out', 'ram_bot'],
+          level:     'trace'
+        }
+    }
+};
 
 // slack notifications
 config.loggerSlack = {
