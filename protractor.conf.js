@@ -13,7 +13,7 @@ exports.config = {
   },
   directConnect: true,
   //baseUrl: 'https://explorer.arisen.network',  
-   baseUrl: 'http://localhost:4200/',
+   baseUrl: 'http://127.0.0.1:4200/',
   framework: 'jasmine',
   jasmineNodeOpts: {
     showColors: true,
