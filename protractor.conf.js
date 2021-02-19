@@ -12,8 +12,8 @@ exports.config = {
     'browserName': 'chrome'
   },
   directConnect: true,
-  baseUrl: 'https://explorer.arisen.network',  
-  // baseUrl: 'http://localhost:4200/',
+  //baseUrl: 'https://explorer.arisen.network',  
+   baseUrl: 'http://localhost:4200/',
   framework: 'jasmine',
   jasmineNodeOpts: {
     showColors: true,
